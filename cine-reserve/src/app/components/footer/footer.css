@@ -1,0 +1,26 @@
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+  padding: 24px 32px;
+  margin-top: 80px;
+}
+
+.footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 3px;
+  color: var(--gold);
+  font-size: 18px;
+}
+
+.footer-copy {
+  color: var(--muted);
+  font-size: 13px;
+}

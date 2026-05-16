@@ -1,0 +1,76 @@
+<div class="home-page">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-text">
+      <p class="hero-eyebrow">Your city. Your screen.</p>
+      <h1 class="hero-title">Now <em>Showing</em></h1>
+      <p class="hero-sub">{{ movies.length }} films · Multiple showtimes daily · Premium seats</p>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-num">{{ movies.length }}</span><span class="stat-label">Films</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">4K</span><span class="stat-label">Screens</span></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><span class="stat-num">Dolby</span><span class="stat-label">Audio</span></div>
+    </div>
+  </section>
+
+  <!-- Genre Filter -->
+  <div class="filter-bar">
+    <button
+      *ngFor="let g of genres"
+      class="filter-btn"
+      [class.active]="activeFilter === g"
+      (click)="setFilter(g)">
+      {{ g }}
+    </button>
+  </div>
+
+  <!-- Movie Grid -->
+  <div class="movies-grid">
+    <div class="movie-card" *ngFor="let movie of filteredMovies">
+
+      <!-- Poster -->
+      <div class="card-poster">
+        <img [src]="movie.poster" [alt]="movie.title" loading="lazy">
+        <span class="badge" *ngIf="movie.badge">{{ movie.badge }}</span>
+        <div class="card-overlay">
+          <span class="rating-big">{{ movie.rating }}</span>
+          <span class="rating-label">/ 10 IMDb</span>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="card-body">
+        <div class="card-meta">
+          <span class="genre-tag">{{ movie.genre }}</span>
+          <span class="lang-tag">{{ movie.language }}</span>
+        </div>
+        <h3 class="card-title">{{ movie.title }}</h3>
+        <p class="card-stars">{{ stars(movie.rating) }} <span class="rating-num">{{ movie.rating }}</span></p>
+        <p class="card-duration">⏱ {{ movie.duration }}</p>
+
+        <!-- Showtimes -->
+        <div class="showtimes">
+          <p class="showtimes-label">Select Showtime</p>
+          <div class="time-pills">
+            <button
+              *ngFor="let time of movie.shows"
+              class="time-pill"
+              [class.selected]="selectedShowtimes[movie.id] === time"
+              (click)="selectShowtime(movie.id, time)">
+              {{ time }}
+            </button>
+          </div>
+        </div>
+
+        <button class="btn-book" (click)="bookMovie(movie)">
+          Book Seats →
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

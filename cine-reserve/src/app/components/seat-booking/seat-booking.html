@@ -1,0 +1,118 @@
+<div class="booking-page">
+
+  <!-- Success Modal -->
+  <div class="success-overlay" *ngIf="bookingSuccess" (click)="dismissSuccess()">
+    <div class="success-modal" (click)="$event.stopPropagation()">
+      <div class="success-icon">✓</div>
+      <h2>Booking Confirmed!</h2>
+      <p class="ref-label">Booking Reference</p>
+      <p class="ref-code">{{ bookingRef }}</p>
+      <p class="success-movie">{{ movieTitle }}</p>
+      <p class="success-time">{{ showtime }}</p>
+      <button class="btn-close-modal" (click)="dismissSuccess()">Done</button>
+    </div>
+  </div>
+
+  <div class="booking-layout">
+
+    <!-- Seat Map -->
+    <div class="seat-section">
+
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Choose Your Seats</h2>
+          <p class="section-sub">{{ movieTitle }} <span *ngIf="showtime">· {{ showtime }}</span></p>
+        </div>
+      </div>
+
+      <!-- Screen -->
+      <div class="screen-wrap">
+        <div class="screen-bar"></div>
+        <p class="screen-label">SCREEN</p>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item"><span class="dot available"></span>Available</div>
+        <div class="legend-item"><span class="dot selected"></span>Selected</div>
+        <div class="legend-item"><span class="dot sold"></span>Sold</div>
+        <div class="legend-item"><span class="dot premium"></span>Premium (₹200)</div>
+      </div>
+
+      <!-- Seat Grid -->
+      <div class="seat-map">
+        <div class="seat-row" *ngFor="let row of rows">
+          <span class="row-label">{{ row }}</span>
+          <div class="seats">
+            <div
+              *ngFor="let seat of seatsForRow(row)"
+              class="seat"
+              [class.seat-available]="seat.status === 'available'"
+              [class.seat-selected]="seat.status === 'selected'"
+              [class.seat-sold]="seat.status === 'sold'"
+              [class.seat-premium]="isPremium(seat.row)"
+              (click)="toggleSeat(seat)"
+              [title]="seat.row + seat.number">
+              {{ seat.number }}
+            </div>
+          </div>
+          <span class="row-price">₹{{ isPremium(row) ? 200 : 120 }}</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+      <div class="sidebar-card">
+        <h3 class="sidebar-title">Your Booking</h3>
+
+        <div class="movie-info">
+          <p class="movie-name">{{ movieTitle }}</p>
+          <p class="movie-time">{{ showtime || 'Select showtime' }}</p>
+        </div>
+
+        <div class="selected-list" *ngIf="selectedSeats.length > 0">
+          <p class="selected-label">Selected Seats</p>
+          <div class="seat-tags">
+            <span class="seat-tag" *ngFor="let s of selectedSeats">
+              {{ s.row }}{{ s.number }}
+              <span class="tag-price">₹{{ isPremium(s.row) ? 200 : 120 }}</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="empty-state" *ngIf="selectedSeats.length === 0">
+          <p>Click seats on the map to select them</p>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="summary-row">
+          <span>Seats</span><span>{{ selectedSeats.length }}</span>
+        </div>
+        <div class="summary-row total-row">
+          <span>Total</span><span>₹{{ total }}</span>
+        </div>
+
+        <div class="error-msg" *ngIf="error">
+          <span>&#9888;</span> {{ error }}
+        </div>
+
+        <button
+          class="btn-confirm"
+          (click)="bookTickets()"
+          [disabled]="selectedSeats.length === 0 || loading">
+          <span *ngIf="!loading">Confirm Booking →</span>
+          <span *ngIf="loading" class="btn-loading">
+            <span class="spinner">◌</span> Processing...
+          </span>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
